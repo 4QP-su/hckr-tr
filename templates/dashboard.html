@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="sidebar">
+    <h3>Overall Progress</h3>
+    <div class="level">Overall Level {{ overall_level }}</div>
+    <div class="progress-container">
+        <div class="progress-bar" style="width: {{ overall_progress }}%;"></div>
+    </div>
+</div>
+
+<div class="container">
+    <h1>🛡️ Lab Dashboard</h1>
+    <p>Select a lab to start:</p>
+
+    <div class="lab-cards">
+        <a href="/sql-injection" class="lab-card">
+            <div class="lab-icon">🔒</div>
+            <div class="lab-title">SQL Injection</div>
+            <div class="lab-progress-container">
+                <div class="lab-progress-bar" style="width: {{ sql_progress }}%"></div>
+            </div>
+            <div class="lab-level">Level {{ sql_level }}</div>
+        </a>
+
+        <a href="/XSS" class="lab-card">
+            <div class="lab-icon">🛡️</div>
+            <div class="lab-title">XSS Lab</div>
+            <div class="lab-progress-container">
+                <div class="lab-progress-bar" style="width: {{ xss_progress }}%"></div>
+            </div>
+            <div class="lab-level">Level {{ xss_level }}</div>
+        </a>
+    </div>
+</div>
+</body>
+</html>
