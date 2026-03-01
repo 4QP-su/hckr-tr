@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKER_OS | Dashboard</title>
+    <style>
+        /* ОСНОВНЫЕ ПЕРЕМЕННЫЕ */
+        :root {
+            --primary-green: #00ff41;
+            --dim-green: #008f23;
+            --deep-bg: #0d0f14;
+            --panel-bg: #11141b;
+            --cyan-accent: #00e5ff;
+            --warning-gold: #ffd700;
+        }
+
+        /* БАЗОВЫЕ СТИЛИ */
+        body {
+            background-color: var(--deep-bg);
+            color: var(--primary-green);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* САЙДБАР (ЛЕВАЯ ПАНЕЛЬ) */
+        .sidebar {
+            width: 320px;
+            background: var(--panel-bg);
+            border-right: 1px solid var(--primary-green);
+            padding: 40px 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .sidebar h2 {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 10px;
+        }
+
+        .avatar {
+            font-family: monospace;
+            white-space: pre;
+            font-size: 8px;
+            line-height: 1;
+            margin-bottom: 25px;
+            color: var(--primary-green);
+            text-align: center;
+        }
+
+        /* СТАТИСТИКА */
+        .stat-group {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--dim-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin: 5px 0;
+            display: block;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #1a1e26;
+            border: 1px solid #004411;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-green);
+            box-shadow: 0 0 10px var(--primary-green);
+            transition: width 0.8s ease-in-out;
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .main-view {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        /* СЕТКА МИССИЙ */
+        .missions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            align-items: start;
+        }
+
+        .mission-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--dim-green);
+            padding: 25px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s ease-out forwards;
+            transition: 0.3s;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mission-card:hover {
+            background: rgba(0, 255, 65, 0.05);
+            border-color: var(--primary-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .mission-card h3 {
+            margin-top: 0;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+
+        .mission-card p {
+            color: var(--primary-green);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            min-height: 50px;
+        }
+
+        /* КНОПКИ */
+        .btn-view,
+        .btn-hack-small {
+            display: inline-block;
+            border: 1px solid var(--primary-green);
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .btn-view {
+            padding: 12px 20px;
+            margin-top: auto;
+        }
+
+        .btn-hack-small {
+            width: 100%;
+            padding: 10px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+
+        .btn-view:hover,
+        .btn-hack-small:hover {
+            background: var(--primary-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-green);
+        }
+
+        /* СОСТОЯНИЯ */
+        .locked {
+            opacity: 0.4;
+            border-style: dashed !important;
+            filter: grayscale(1);
+        }
+
+        .badge {
+            background: var(--primary-green);
+            color: #000;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            float: right;
+        }
+
+        /* ФУТЕР */
+        .system-footer {
+            margin-top: auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0, 255, 65, 0.1);
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            color: var(--dim-green);
+        }
+
+        /* АНИМАЦИИ */
+        .cursor {
+            animation: blink 1s infinite;
+            border-left: 10px solid var(--primary-green);
+            margin-left: 5px;
+        }
+
+        .blink {
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* СКРОЛЛБАР */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--deep-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--dim-green);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="avatar">
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣀⡀⠀⠀⠀⠀⠀⠀⠀
+            ⠀⠀⠀⣠⣴⡶⢶⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⣾⠋⠙⢿⣆⣤⣤⣄⠀⠀⠀
+            ⠀⠀⢰⣿⠁⠀⠀⠀⠙⢷⡄⠀⠀⠀⠀⠀⢸⡿⠀⠀⠀⠛⠉⠀⠹⣧⠀⠀
+            ⠀⠀⣠⡿⠆⠀⠀⠀⠀⠈⢿⡄⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⢠⣿⠀⠀
+            ⢀⣾⠋⠀⠀⠀⠀⠀⠀⠀⠈⣿⡀⠀⠀⠀⢸⣧⠀⠀⠀⠀⢀⣴⡿⠁⠀⠀
+            ⠀⠻⣶⣤⣤⣀⣀⣀⣠⣤⣤⣿⡇⠀⠀⠀⠈⣿⣀⣠⣤⡾⠟⠋⠀⠀⠀⠀
+            ⠀⠀⠀⠀⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠛⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀
+
+            ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⡀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀
+            ⠀⠀⠀⠀⠀⢀⣤⡾⠛⠋⠹⣷⠀⠀⠀⢸⣿⠛⠛⠉⠉⠉⠙⠛⠛⢷⣦⠀
+            ⠀⠀⠀⠀⣴⡟⠉⠀⠀⠀⠀⣿⡇⠀⠀⠘⣿⡀⠀⠀⠀⠀⠀⠀⠀⣠⡿⠁
+            ⠀⠀⠀⣼⡏⠀⠀⠀⠀⠀⠀⢸⣇⠀⠀⠀⠘⣷⡀⠀⠀⠀⠀⢴⣾⠋⠀⠀
+            ⠀⠀⠀⢻⣇⠀⠀⢀⠀⠀⠀⢸⡟⠀⠀⠀⠀⠙⢷⣄⠀⠀⠀⠀⣿⠇⠀⠀
+            ⠀⠀⠀⠀⠙⠷⠾⠛⢷⣄⣀⣾⠇⠀⠀⠀⠀⠀⠀⠙⠻⠶⠾⠟⠋⠀⠀⠀
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        </div>
+        <h2>AGENT_PROFILE</h2>
+
+        <div class="stat-group">
+            <span class="stat-label">RANK: JUNIOR_PENTESTER</span>
+            <div class="progress-container">
+                <div class="progress-bar"
+                    style="width: 35%; background: var(--cyan-accent); box-shadow: 0 0 10px var(--cyan-accent);"></div>
+            </div>
+            <span style="font-size: 0.7rem; opacity: 0.6; margin-top: 5px; display: block;">350 XP / 500 XP</span>
+        </div>
+
+        <div class="stat-group"
+            style="border: 1px solid var(--warning-gold); padding: 10px; background: rgba(255, 215, 0, 0.05);">
+            <span class="stat-label" style="color: var(--warning-gold);">STASH_BALANCE</span>
+            <span class="stat-value" style="color: var(--warning-gold);">$500</span>
+        </div>
+
+        <div class="stat-group">
+            <span class="stat-label">ACHIEVEMENTS</span>
+            <span class="stat-value" style="color: var(--cyan-accent);">1</span>
+        </div>
+
+        <a href="/achievements" class="btn-view">ACCESS_TROPHIES</a>
+    </div>
+
+    <div class="main-view">
+        <h1>$ sudo run --lab-manager<span class="cursor">&nbsp;</span></h1>
+
+        <div class="missions-grid">
+            <div class="mission-card" style="animation-delay: 0.1s;">
+                <span class="badge">ACTIVE</span>
+                <h3>[#] SQL_INJECTION</h3>
+                <p>Манипуляция запросами к БД. Обход AUTH и UNION-атаки.</p>
+                <div style="font-size: 0.7rem; color: var(--cyan-accent);">SYNC: 0%</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <a href="/sql-injection/levels" class="btn-hack-small">> ACCESS_LAB</a>
+            </div>
+
+            <div class="mission-card" style="animation-delay: 0.2s;">
+                <span class="badge">ACTIVE</span>
+                <h3>[#] XSS_VULN</h3>
+                <p>Внедрение JS-скриптов. Кража COOKIE и фишинг.</p>
+                <div style="font-size: 0.7rem; color: var(--cyan-accent);">SYNC: 0%</div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <a href="/XSS" class="btn-hack-small">> ACCESS_LAB</a>
+            </div>
+
+            <div class="mission-card locked">
+                <h3>[X] PASSWORD_CRACKING</h3>
+                <p>Брутфорс и работа со словарями. Требуется Rank: SENIOR.</p>
+                <div style="margin-top: 20px; font-size: 0.8rem;">🔒 LOCKED BY SYSTEM</div>
+            </div>
+
+            <div class="mission-card locked">
+                <h3>[X] NETWORK_RECON</h3>
+                <p>Сканирование портов и анализ трафика. В разработке...</p>
+                <div style="margin-top: 20px; font-size: 0.8rem;">🔒 LOCKED BY SYSTEM</div>
+            </div>
+        </div>
+
+        <div class="system-footer">
+            <div class="footer-stats">
+                <span>>> UPTIME: 99.9%</span> |
+                <span>>> ENCRYPTION: AES-256</span> |
+                <span class="blink">>> SYSTEM_READY...</span>
+            </div>
+            <div class="timestamp">
+                [ 17.02.2026 | 15:04 ]
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mission Selection | SQL Lab</title>
+    <style>
+        /* Глобальные настройки терминала */
+        body {
+            background-color: #050505;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 40px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Анимация сканирующей линии (как на старых мониторах) */
+        body::before {
+            content: " ";
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid #00ff41;
+            padding-bottom: 20px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .levels-grid {
+            display: grid;
+            /* Улучшенная сетка: карточки не будут раздуваться на весь экран */
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .level-card {
+            background: #000;
+            border: 1px solid #004411;
+            padding: 30px;
+            text-decoration: none;
+            color: #00ff41;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            /* Чтобы футер карточки всегда был внизу */
+            flex-direction: column;
+        }
+
+        .theory-preview {
+            font-size: 0.9rem;
+            color: #008f23;
+            line-height: 1.5;
+            border-top: 1px solid #002200;
+            padding-top: 15px;
+            margin-bottom: 10px;
+            flex-grow: 1;
+            /* Растягивает блок, прижимая статус-бокс вниз */
+            /* Эффект затухания текста, если он слишком длинный */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .status-box {
+            margin-top: auto;
+            /* Прижимает к низу карточки */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            background: rgba(0, 255, 65, 0.05);
+            /* Чуть светлее фон */
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 255, 65, 0.1);
+        }
+
+        /* Эффект свечения при наведении на заголовок внутри карточки */
+        .level-card:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.15), inset 0 0 10px rgba(0, 255, 65, 0.05);
+            border-color: #00ff41;
+        }
+
+        .level-id {
+            font-size: 0.75rem;
+            color: #00661a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .level-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+            /* Белый для контраста */
+        }
+
+        .theory-preview {
+            font-size: 0.9rem;
+            color: #008f23;
+            line-height: 1.5;
+            border-top: 1px solid #002200;
+            padding-top: 15px;
+            height: 70px;
+            overflow: hidden;
+        }
+
+        /* Статус-бар внизу карточки */
+        .status-box {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            background: #001100;
+            padding: 5px 10px;
+        }
+
+        .tag-active {
+            color: #000;
+            background: #00ff41;
+            padding: 2px 6px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 60px;
+            color: #444;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>[!] SQL_TARGET_INFRASTRUCTURE</h1>
+
+    <div class="levels-grid">
+        {% for level in levels %}
+        <a class="level-card" href="{{ url_for('sql_level', level_id=level.id) }}">
+            <div class="level-id">PATH: root/targets/level_0{{ level.id }}</div>
+            <div class="level-title">> {{ level.title }}</div>
+            <div class="theory-preview">
+                DATA_INTEL: {{ level.theory[:115] }}...
+            </div>
+
+            <div class="status-box">
+                <span>INTEL: ACQUIRED</span>
+                <span class="tag-active">READY_TO_INJECT</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <a href="/dashboard" class="back-link">
+        << ABORT_MISSION_AND_RETURN_TO_BASE</a>
+
+</body>
+
+</html>
